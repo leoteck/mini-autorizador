@@ -5,7 +5,6 @@ import com.vr.authorizer.converter.CartaoConverter;
 import com.vr.authorizer.entity.CartaoEntity;
 import com.vr.authorizer.entity.SaldoEntity;
 import com.vr.authorizer.exception.CartaoJaExistenteException;
-import com.vr.authorizer.repository.CartaoMemoryRepository;
 import com.vr.authorizer.repository.CartaoRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +18,10 @@ public class CartaoService {
 
     private final CartaoRepository cartaoRepository;
 
-    public CartaoService(CartaoMemoryRepository cartaoRepository) {
+    public CartaoService(CartaoRepository cartaoRepository) {
         this.cartaoRepository = cartaoRepository;
     }
 
-    //@Transaction
     public Optional<BigDecimal> obterSaldo(String numeroCartao) {
         return cartaoRepository.findByNumeroCartao(numeroCartao)
                 .map(CartaoEntity::getSaldo)

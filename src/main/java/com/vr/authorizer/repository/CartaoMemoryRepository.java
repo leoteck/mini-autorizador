@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Repository
-public class CartaoMemoryRepository implements CartaoRepository {
+public class CartaoMemoryRepository {
 
     private final ConcurrentMap<String, CartaoEntity> cartoes = new ConcurrentHashMap<>();
 

@@ -132,3 +132,7 @@ Desafios (não obrigatórios):
  * é possível construir a solução inteira sem utilizar nenhum if. Só não pode usar *break* e *continue*! 
  * como garantir que 2 transações disparadas ao mesmo tempo não causem problemas relacionados à concorrência?
 Exemplo: dado que um cartão possua R$10.00 de saldo. Se fizermos 2 transações de R$10.00 ao mesmo tempo, em instâncias diferentes da aplicação, como o sistema deverá se comportar?
+
+ ## Banco de dados
+
+Para iniciar o banco, executar `docker compose -f docker/docker-compose.yml up -d mysql` a partir da raiz do projeto. Ao iniciar a aplicação, `src/main/resources/schema.sql` cria as tabelas.
