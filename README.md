@@ -135,4 +135,12 @@ Exemplo: dado que um cartão possua R$10.00 de saldo. Se fizermos 2 transações
 
  ## Banco de dados
 
-Para iniciar o banco, executar `docker compose -f docker/docker-compose.yml up -d mysql` a partir da raiz do projeto. Ao iniciar a aplicação, `src/main/resources/schema.sql` cria as tabelas.
+Para iniciar o banco, executar `docker compose -f docker/docker-compose.yml up -d mysql` a partir da raiz do projeto.
+a Aplicação está configurada para que, a cada inicialização, o Hibernate recrie as tabelas mapeadas pelas entidades;
+O arquivo `src/main/resources/schema.sql` contém o esquema SQL para referência/execução manual, mas não é executado automaticamente. 
+
+## Considerações da Solução
+
+### Tratativa a Concorrência
+Para tratar o cenário de concorrência, foi utilizado o banco de dados por meio de lock no registro da tabela que detém o saldo.
+O lock é mantido até o commit (final da execução do metodo transacaoService.realizar), serializando débitos concorrentes do mesmo cartão;

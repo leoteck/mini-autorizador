@@ -3,7 +3,6 @@ package com.vr.authorizer.service;
 import com.vr.authorizer.controller.dto.CartaoResponse;
 import com.vr.authorizer.converter.CartaoConverter;
 import com.vr.authorizer.entity.CartaoEntity;
-import com.vr.authorizer.entity.SaldoEntity;
 import com.vr.authorizer.exception.CartaoJaExistenteException;
 import com.vr.authorizer.repository.CartaoRepository;
 import org.springframework.stereotype.Service;
@@ -24,15 +23,14 @@ public class CartaoService {
 
     public Optional<BigDecimal> obterSaldo(String numeroCartao) {
         return cartaoRepository.findByNumeroCartao(numeroCartao)
-                .map(CartaoEntity::getSaldo)
-                .map(SaldoEntity::getValor);
+                .map(CartaoEntity::getSaldo);
     }
 
     public CartaoResponse criar(String numeroCartao, String senha) {
        cartaoRepository.findByNumeroCartao(numeroCartao).ifPresent(
                cartao -> { throw new CartaoJaExistenteException(numeroCartao); });
 
-        final CartaoEntity cartaoEntity = cartaoRepository.save(new CartaoEntity(numeroCartao, senha, new SaldoEntity(SALDO_INICIAL)));
+        final CartaoEntity cartaoEntity = cartaoRepository.save(new CartaoEntity(numeroCartao, senha, SALDO_INICIAL));
        return CartaoConverter.convertEntityToResponse(cartaoEntity);
     }
 }

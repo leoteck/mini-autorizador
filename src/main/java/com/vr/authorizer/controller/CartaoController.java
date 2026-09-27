@@ -36,7 +36,7 @@ public class CartaoController {
             response = cartaoService.criar(request.numeroCartao(), request.senha());
         }catch(CartaoJaExistenteException ex) {
             logger.warn("Erro ao criar cartão: {}", ex.getMessage());
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new CartaoResponse(request.numeroCartao(), request.senha()));
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new CartaoResponse(request.senha(), request.numeroCartao()));
         }
         logger.info("Cartão criado com sucesso!");
         return ResponseEntity.status(response != null ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR)
