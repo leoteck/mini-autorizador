@@ -1,12 +1,11 @@
 package com.vr.authorizer.repository;
 
 import com.vr.authorizer.entity.CartaoEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface CartaoRepository {
+public interface CartaoRepository extends JpaRepository<CartaoEntity, Long> {
 
-    public Optional<CartaoEntity> findByNumeroCartao(final String numeroCartao);
-
-    public CartaoEntity save(CartaoEntity cartao);
+    Optional<CartaoEntity> findByNumeroCartao(String numeroCartao);
 }

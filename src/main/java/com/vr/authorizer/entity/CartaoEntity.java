@@ -1,18 +1,39 @@
 package com.vr.authorizer.entity;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "CARTAO")
 public class CartaoEntity {
 
-    private String numeroCartao;
-    private String senha;
-    private SaldoEntity saldo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_CARTAO")
+    private Long id;
 
+    @Column(name = "NUMERO_CARTAO", nullable = false, unique = true, length = 16)
+    private String numeroCartao;
+
+    @Column(name = "SENHA", nullable = false)
+    private String senha;
+
+    @Column(name = "SALDO", nullable = false, precision = 10, scale = 2)
+    private BigDecimal saldo;
+
+    public CartaoEntity(String numeroCartao, String senha, BigDecimal saldo) {
+        this.numeroCartao = numeroCartao;
+        this.senha = senha;
+        this.saldo = saldo;
+    }
 }

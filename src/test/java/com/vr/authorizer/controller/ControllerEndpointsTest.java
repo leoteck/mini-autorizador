@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -16,7 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class ControllerEndpointsTest {
 
-    private static final String NUMERO_CARTAO = "6549873025634501";
+    private static final String NUMERO_CARTAO = "9" + String.format(
+            "%015d",
+            Math.floorMod(UUID.randomUUID().getLeastSignificantBits(), 1_000_000_000_000_000L));
 
     @Autowired
     private MockMvc mockMvc;
