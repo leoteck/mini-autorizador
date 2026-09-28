@@ -133,14 +133,25 @@ Desafios (não obrigatórios):
  * como garantir que 2 transações disparadas ao mesmo tempo não causem problemas relacionados à concorrência?
 Exemplo: dado que um cartão possua R$10.00 de saldo. Se fizermos 2 transações de R$10.00 ao mesmo tempo, em instâncias diferentes da aplicação, como o sistema deverá se comportar?
 
- ## Banco de dados
+ ## Startup via docker-compose
 
-Para iniciar o banco, executar `docker compose -f docker/docker-compose.yml up -d mysql` a partir da raiz do projeto.
-a Aplicação está configurada para que, a cada inicialização, o Hibernate recrie as tabelas mapeadas pelas entidades;
-O arquivo `src/main/resources/schema.sql` contém o esquema SQL para referência/execução manual, mas não é executado automaticamente. 
+Para iniciar o MySQL e depois a aplicação em containers separados, executar a partir da raiz do projeto:
+
+```sh
+docker compose -f docker/docker-compose.yml up -d mysql
+docker compose -f docker/docker-compose.yml up --build -d app
+```
+
+A API ficará disponível em `http://localhost:8080`. 
+A aplicação conecta ao MySQL pelo hostname `mysql`; 
+Inicie primeiro o banco e aguarde-o aceitar conexões. 
+
+OBS1: a configuração `spring.jpa.hibernate.ddl-auto=create` recria as tabelas e apaga os dados a cada inicialização da aplicação.
+
+OBS2:O arquivo `src/main/resources/schema.sql` contém o esquema SQL para referência/execução manual; não é executado automaticamente.
 
 ## Considerações da Solução
 
-### Tratativa a Concorrência
+### Tratativa da Concorrência
 Para tratar o cenário de concorrência, foi utilizado o banco de dados por meio de lock no registro da tabela que detém o saldo.
 O lock é mantido até o commit (final da execução do metodo transacaoService.realizar), serializando débitos concorrentes do mesmo cartão;

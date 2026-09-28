@@ -1,4 +1,8 @@
 package com.vr.authorizer.controller.dto;
 
-public record CartaoRequest(String numeroCartao, String senha) {
+import jakarta.validation.constraints.NotNull;
+
+public record CartaoRequest(
+        @NotNull String numeroCartao,
+        @NotNull String senha) {
 }

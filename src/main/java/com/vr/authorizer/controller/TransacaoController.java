@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
+import static com.vr.authorizer.service.TransacaoResultado.*;
+
 @RestController
 @RequestMapping("/transacoes")
 public class TransacaoController {
@@ -20,14 +24,23 @@ public class TransacaoController {
         this.transacaoService = transacaoService;
     }
 
+    private static final Map<TransacaoResultado, HttpStatus> STATUS_POR_RESULTADO = Map.of(
+            AUTORIZADA, HttpStatus.CREATED,
+            SALDO_INSUFICIENTE, HttpStatus.UNPROCESSABLE_ENTITY,
+            SENHA_INVALIDA, HttpStatus.UNPROCESSABLE_ENTITY,
+            CARTAO_INEXISTENTE, HttpStatus.UNPROCESSABLE_ENTITY
+    );
+
     @PostMapping
     public ResponseEntity<String> realizar(@RequestBody TransacaoRequest request) {
         TransacaoResultado resultado = transacaoService.realizar(
                 request.numeroCartao(), request.senhaCartao(), request.valor());
 
-        if (resultado == TransacaoResultado.AUTORIZADA) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(resultado.getMensagem());
-        }
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(resultado.getMensagem());
+        return buildResponse(resultado);
+    }
+
+    private ResponseEntity<String> buildResponse(final TransacaoResultado resultado) {
+        HttpStatus status = STATUS_POR_RESULTADO.get(resultado);
+        return ResponseEntity.status(status).body(resultado.getMensagem());
     }
 }
